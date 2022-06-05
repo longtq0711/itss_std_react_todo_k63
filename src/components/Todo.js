@@ -19,13 +19,20 @@ import useStorage from '../hooks/storage';
 import {getKey} from "../lib/util";
 
 function Todo() {
-  const [items, putItems] = React.useState([
-      /* テストコード 開始 */
-    { key: getKey(), text: '日本語の宿題', done: true },
-    { key: getKey(), text: 'reactを勉強する', done: false },
-    { key: getKey(), text: '明日の準備をする', done: false },
+  // const [items, putItems] = React.useState([
+  //     /* テストコード 開始 */
+  //   { key: getKey(), text: '日本語の宿題', done: true },
+  //   { key: getKey(), text: 'reactを勉強する', done: false },
+  //   { key: getKey(), text: '明日の準備をする', done: false },
     /* テストコード 終了 */
-  ]);
+  // ]);
+  const [items, putItems, clearItems] = useStorage([]);
+
+  // const [tab,setTabs] = useState("全て");
+  // const itemTab = () => {
+  //     const tabItem = items.filter((item) => {
+  //         if (tab =   
+  
 
   const [filter, setFilter] = useState(0);
 
@@ -47,7 +54,7 @@ function Todo() {
     setFilter(filter);
   }
 
-   switch (filter) {
+  switch (filter) {
     case 1:
       // code
       itemRender = items.filter((item) => {
@@ -61,8 +68,13 @@ function Todo() {
       break;
     default:
       // code
-   }
-
+  }
+  const handleCheck = (key) => {
+    const newItems= [...items];
+    newItems[key].done = !newItems[key].done;
+    putItems(newItems);
+  }
+  
   return (
     <div className="panel">
       <div className="panel-heading">
@@ -72,11 +84,16 @@ function Todo() {
         <input className="input" type="text" onKeyDown={(e) => onChange(e)}></input>
       </label>
       <Filter onFilterTodo={filterTodo}/>
-      {itemRender.map(item => (
-        <TodoItem key={item.key} item={item} />
+      {itemRender.map((item,index) => (
+        <TodoItem key={item.key} item={item} index={index} onCheck={handleCheck} />
       ))}
       <div className="panel-block">
         {itemRender.length} items
+      </div>
+      <div className="panel-block">
+        <button className="button is-light is-fullwidth" onClick={clearItems}>
+           全てのToDoを削除
+         </button>
       </div>
     </div>
   );
