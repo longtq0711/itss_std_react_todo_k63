@@ -4,22 +4,14 @@
 　・チェックボックスにチェックが入っているか管理する
 　・チェックボックスにチェックが入っているかアイテムをグレーアウトする
 */
-import {useState} from 'react';
+// import {useState} from 'react';
 
-function TodoItem({item}) {
-  const [state, setState] = useState({
-    isCheck: false
-  })
-
-  function toggleCheck() {
-    setState({isCheck: !state.isCheck});
-    console.log(state.isCheck);
-  }
+function TodoItem({item, index, onCheck}) {
   return (
     <label className="panel-block">
-        <input type="checkbox"         onChange={toggleCheck} />
+        <input type="checkbox" checked={item.done} onChange={() => onCheck(index)} />
       <span 
-        className={state.isCheck ? 'has-text-grey-light' : ''}
+        className={item.done ? 'has-text-grey-light' : ''}
       >
         {item.text}
       </span>
